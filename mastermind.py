@@ -102,7 +102,10 @@ class GameController:
                 print(game.answer)
                 break
             elif game.win:
+                self.ClearScreen()
+                game.GameScreen()
                 print("Congrats")
+                input("Press ('Enter') to continue")
         self.Menu_Run()
 
     def Menu_Run(self):
