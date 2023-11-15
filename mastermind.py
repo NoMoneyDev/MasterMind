@@ -31,6 +31,7 @@ class Game:
         self.answer = self.generate_ans()
         self.guess_history = ['' for i in range(Settings.maxattempt)]
         self.check_history = ['' for i in range(Settings.maxattempt)]
+        self._specialButton = ['Q', 'H']
 
     def check(self):
         check = []
@@ -50,8 +51,9 @@ class Game:
     def take_input(self):
         while True:
             _guess = input()
-            if _guess == 'Q':
-                break
+            if _guess in self._specialButton:
+                self.input = _guess
+                return
             elif len(_guess.split()) != Settings.codesize:
                 print(f"-----Please enter {Settings.codesize} number separated by space(' '), or quit by typing ('Q')-----")
             else: break
@@ -90,12 +92,21 @@ class GameController:
             #print(game.answer)
             self.ClearScreen()
             game.GameScreen()
-            print(game.answer)
+
+
+            print(game.answer)                      # REMOVE THIS BEFORE HAND IN
+
+
             # Input Loop
             game.take_input()
-            game.check()
-            if game.input == 'Q':
-                break
+            if game.input in game._specialButton:
+                if game.input == 'Q':
+                    break
+                elif game.input == 'H':
+                    print(f"Hint : There is a '{random.choice(game.answer)}' in the code")
+                    input("Press ('Enter') to continue")
+            else:
+                game.check()
 
             if game.attempts > Settings.maxattempt-1:
                 print("You exceeded max attempt, Game Lost.")
@@ -105,7 +116,7 @@ class GameController:
                 self.ClearScreen()
                 game.GameScreen()
                 print("Congrats")
-                input("Press ('Enter') to continue")
+        input("Press ('Enter') to continue")
         self.Menu_Run()
 
     def Menu_Run(self):
@@ -124,11 +135,11 @@ class GameController:
     def Settings_Run(self):
         self.ClearScreen()
         while True:
-            response = input("1. Max Attempt\n"
-                             "2. Code Size\n"
-                             "3. Number of Colors\n"
-                             "4. Duplicates Allowed [Y/N]\n"
-                             "('Q') to quit\n")
+            response = input(f"1. {'Max Attempt' : <20} [{Settings.maxattempt}]\n"
+                             f"2. {'Code Size' : <20} [{Settings.codesize}]\n"
+                             f"3. {'Number of Colors' : <20} [{Settings.color}]\n"
+                             f"4. {'Duplicates Allowed' : <20} [{'Y' if Settings.Duplicates else 'N'}]\n"
+                             f"('Q') to quit\n")
             if response == '1':
                 while True:
                     _input = int(input("Change Max Attempt to: "))
