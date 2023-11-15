@@ -62,6 +62,10 @@ class Game:
 
     def generate_ans(self):
         _ans = []
+        if not Settings.Duplicates and Settings.color < Settings.codesize:
+            print('Available color is less than codesize, Duplicate is now enabled.')
+            input("Press ('Enter') to continue")
+            Settings.Duplicates = True
         while len(_ans) != Settings.codesize:
             num = str(random.randint(1, Settings.color))
             if num not in _ans or Settings.Duplicates:
@@ -70,7 +74,7 @@ class Game:
 
     def GameScreen(self):
         padding = Settings.codesize*2
-        print(f"{"="*8} || {"="*8}")
+        print(f"{"="*padding} || {"="*padding}")
         for i in range(Settings.maxattempt):
             print(f"{''.join(self.guess_history[i]): <{padding}} || {' '.join(self.check_history[i]) : <{padding}}")
 
@@ -116,6 +120,7 @@ class GameController:
                 self.ClearScreen()
                 game.GameScreen()
                 print("Congrats")
+        print('='*27)
         input("Press ('Enter') to continue")
         self.Menu_Run()
 
